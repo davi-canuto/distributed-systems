@@ -19,6 +19,7 @@ puts "Waiting connections!"
 QUIZ_API_KEY = "q3hAvmCF4S7Qg4qykeHChrJZG04mkptP1eResV9s"
 QUIZ_URL = URI.parse("https://quizapi.io/api/v1/questions?apiKey=#{QUIZ_API_KEY}&limit=5")
 
+# TCP
 loop do
   client = tcp_socket.accept
 
@@ -64,7 +65,40 @@ loop do
   end
 end
 
-# loop do
-#   message, _ = udp_socket.recvfrom(1024)
-#   puts "Received UDP message: #{message}"
-# end
+# UDP
+loop do
+  data, client_addr = udp_socket.recvfrom(1024)
+  client_ip = client_addr[3]  # Obtém o IP do cliente
+
+  response = Net::HTTP.get_response(QUIZ_URL)
+  quiz_data = JSON.parse(response.body)
+
+  quiz_data.each do |quiz|
+    question = quiz["question"]
+    answers = quiz["answers"]
+    answers.delete_if { |_, value| value.nil? }
+    correct_answers = quiz["correct_answers"].map do |key, value|
+      { choice: "#{key.split("_")[1]}", value: value }
+    end
+
+    udp_socket.send("QUESTION:\n#{question}\n\n", 0, client_ip, UDP_PORT)
+
+    answers.each do |key, value|
+      udp_socket.send("#{key[-1]}: #{value}\n", 0, client_ip, UDP_PORT)
+    end
+
+    udp_socket.send("Digite sua resposta:", 0, client_ip, UDP_PORT)
+    user_response, _ = udp_socket.recvfrom(1024)
+    res = user_response.strip
+
+    if correct_answers.find { |row| row[:choice] == res }[:value] == "true"
+      udp_socket.send("----------------- Correct :D ---------------\n", 0, client_ip, UDP_PORT)
+    else
+      udp_socket.send("----------------- Wrong ;c -----------------\n", 0, client_ip, UDP_PORT)
+    end
+
+    if res.downcase == "exit"
+      break
+    end
+  end
+end
