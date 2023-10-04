@@ -4,43 +4,37 @@ HOST = 'localhost'
 PORT = 3333
 
 udp_socket = UDPSocket.new
-udp_socket.connect(HOST, PORT)
 
-puts "Enter 'quiz' to start quiz, and press 'exit' for exit quiz."
+puts "Enter 'quiz' to start quiz, and press 'exit' to exit the quiz."
 
-while true
+loop do
   command = gets.chomp
 
   if command.downcase == 'exit'
+    udp_socket.send('exit', 0, HOST, PORT) # Envia um comando 'exit' para encerrar o servidor UDP
+    udp_socket.close
     break
   end
 
   if command.downcase == 'quiz'
-    puts 'chegou aq'
-    udp_socket.send('quiz', 0)
+    udp_socket.send('quiz', 0, HOST, PORT)
 
-    data, _ = udp_socket.recvfrom(1024)
-    puts data
+    while true
+      data, _ = udp_socket.recvfrom(1024)
+      puts data
 
-    # while true
-    #   data, _ = udp_socket.recvfrom(1024)
-    #   puts data
+      if data.include?('Digite sua resposta:')
+        response = gets.chomp
 
-    #   if data.include?('Digite sua resposta:')
-    #     response = gets.chomp
+        udp_socket.send(response, 0, HOST, PORT)
+      end
 
-    #     udp_socket.send(response, 0)
-
-    #     data, _ = udp_socket.recvfrom(1024)
-    #     puts data
-    #   end
-    # end
+      if data.include?('finally')
+        udp_socket.close
+        break
+      end
+    end
   end
 end
 
 udp_socket.close
-
-
-
-
-
