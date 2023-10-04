@@ -3,7 +3,7 @@ require 'socket'
 HOST = 'localhost'
 PORT = 2222
 
-socket = TCPSocket.open(HOST, PORT)
+socket = Socket.tcp(HOST, PORT)
 
 puts "Enter 'quiz' to start quiz, and press 'exit' for exit quiz."
 
