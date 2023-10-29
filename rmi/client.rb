@@ -6,12 +6,12 @@ class CoupChallengeClient
   def initialize(name, uri)
     @player_name = name
     @server = DRbObject.new_with_uri(uri)
+    @score = 0
   end
 
   def play
     options = [1,2,3]
     while true
-      score = 0
       options_sorted_number = @server.shuffle(options)
       send("draw_cups_with_balls_#{options_sorted_number}_option")
 
@@ -23,8 +23,8 @@ class CoupChallengeClient
       answer = gets.chomp
       real_sorted_number = @server.shuffle(options)
       if (answer.to_s == real_sorted_number.to_s)
+        @score += 1
         puts "CORRECT!!!!!!!!!"
-        score += 1
       else
         puts "WRONG!!!!!!!!!"
       end
@@ -34,7 +34,7 @@ class CoupChallengeClient
       continue_answer = gets.chomp
 
       if continue_answer.downcase != "y"
-        puts "#{@player_name} score: #{score}"
+        puts "#{@player_name} score: #{@score}"
         break
       end
     end
