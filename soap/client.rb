@@ -1,8 +1,13 @@
 require 'savon'
 
-soap_client = Savon.client(wsdl: 'http://service.example.com/wsdl?wsdl')
+wsdl_url = 'http://127.0.0.1:8000/tarot?wsdl'
 
-soap_client.operations
+client = Savon.client(
+  wsdl: wsdl_url,
+  endpoint: 'http://127.0.0.1:8000/tarot',
+  namespaces: { 'xmlns:tns' => 'http://example.com/simple-service' },
+  pretty_print_xml: true
+)
 
-response = soap_client.call(:find_user, message: { id: 42 })
-response.body
+puts "Operações disponíveis: #{client.operations}"
+puts client.call(:get_hello_string)

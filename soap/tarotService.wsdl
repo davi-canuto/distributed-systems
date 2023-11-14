@@ -1,0 +1,51 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             name="SimpleService"
+             targetNamespace="http://127.0.0.1:8000/tarot/simple-service"
+             xmlns:tns="http://127.0.0.1:8000/tarot/simple-service">
+
+    <!-- Types -->
+    <types>
+        <xsd:schema targetNamespace="http://127.0.0.1:8000/tarot/simple-service">
+            <xsd:element name="GetHelloStringResponse" type="xsd:string"/>
+        </xsd:schema>
+    </types>
+
+    <!-- Message -->
+    <message name="GetHelloStringRequest"/>
+
+    <message name="GetHelloStringResponse">
+        <part name="result" element="tns:GetHelloStringResponse"/>
+    </message>
+
+    <!-- Port Type -->
+    <portType name="SimpleServicePortType">
+        <operation name="GetHelloString">
+            <input message="tns:GetHelloStringRequest"/>
+            <output message="tns:GetHelloStringResponse"/>
+        </operation>
+    </portType>
+
+    <!-- Binding -->
+    <binding name="SimpleServiceBinding" type="tns:SimpleServicePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="GetHelloString">
+            <soap:operation soapAction="http://127.0.0.1:8000/tarot/simple-service/GetHelloString"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- Service -->
+    <service name="SimpleService">
+        <port name="SimpleServicePort" binding="tns:SimpleServiceBinding">
+            <soap:address location="http://127.0.0.1:8000/tarot"/>
+        </port>
+    </service>
+</definitions>

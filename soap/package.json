@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "http": "^0.0.1-security",
     "soap": "1.0.0"
   }
 }
