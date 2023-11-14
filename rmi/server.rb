@@ -7,7 +7,7 @@ class CoupChallengeServer
 end
 
 remote_object = CoupChallengeServer.new
-URI = 'druby://localhost:3000'
+URI = 'druby://172.22.31.242:3000'
 DRb.start_service(URI, remote_object)
 
 puts "Server of remote objects running in #{URI}"

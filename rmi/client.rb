@@ -1,6 +1,6 @@
 require 'drb/drb'
 
-URI = 'druby://localhost:3000'
+URI = 'druby://172.22.31.242:3000'
 
 class CoupChallengeClient
   def initialize(name, uri)
