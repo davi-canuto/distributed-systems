@@ -1,49 +1,52 @@
-<definitions name = "HelloService"
-   targetNamespace = "http:127.0.0.1.com/tarot/HelloService.wsdl"
+<definitions name = "TarotService"
+   targetNamespace = "http:127.0.0.1.com/tarot/TarotService.wsdl"
    xmlns = "http://schemas.xmlsoap.org/wsdl/"
    xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
-   xmlns:tns = "http:127.0.0.1.com/tarot/HelloService.wsdl"
+   xmlns:tns = "http:127.0.0.1.com/tarot/TarotService.wsdl"
    xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
 
-   <message name = "SayHelloRequest">
-      <part name = "firstName   " type = "xsd:string"/>
+   <message name = "TarotRequest">
+      <part name = "past" type = "xsd:boolean"/>
+      <part name = "present" type = "xsd:boolean"/>
+      <part name = "future" type = "xsd:boolean"/>
+      <part name = "all" type = "xsd:boolean"/>
    </message>
 
-   <message name = "SayHelloResponse">
+   <message name = "TarotResponse">
       <part name = "greeting" type = "xsd:string"/>
    </message>
 
-   <portType name = "Hello_PortType">
-      <operation name = "sayHello">
-         <input message = "tns:SayHelloRequest"/>
-         <output message = "tns:SayHelloResponse"/>
+   <portType name = "Tarot_PortType">
+      <operation name = "shuffleAndDeliverCards">
+         <input message = "tns:TarotRequest"/>
+         <output message = "tns:TarotResponse"/>
       </operation>
    </portType>
 
-   <binding name = "Hello_Binding" type = "tns:Hello_PortType">
+   <binding name = "Tarot_Binding" type = "tns:Tarot_PortType">
       <soap:binding style = "rpc"
          transport = "http://schemas.xmlsoap.org/soap/http"/>
-      <operation name = "sayHello">
-         <soap:operation soapAction = "sayHello"/>
+      <operation name = "shuffleAndDeliverCards">
+         <soap:operation soapAction = "shuffleAndDeliverCards"/>
          <input>
             <soap:body
                encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
-               namespace = "urn:examples:helloservice"
+               namespace = "urn:examples:tarotservice"
                use = "encoded"/>
          </input>
 
          <output>
             <soap:body
                encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
-               namespace = "urn:examples:helloservice"
+               namespace = "urn:examples:tarotservice"
                use = "encoded"/>
          </output>
       </operation>
    </binding>
 
-   <service name = "Hello_Service">
-      <documentation>WSDL File for HelloService</documentation>
-      <port binding = "tns:Hello_Binding" name = "Hello_Port">
+   <service name = "Tarot_Service">
+      <documentation>WSDL File for TarotService</documentation>
+      <port binding = "tns:Tarot_Binding" name = "Tarot_Port">
          <soap:address
             location = "http:127.0.0.1.com/tarot" />
       </port>

@@ -4,13 +4,47 @@ const http = require("http");
 const WSDL_PATH = "./tarotService.wsdl";
 const WSDL_DEFINITION = require("fs").readFileSync(WSDL_PATH, "utf8");
 
+const arrayOfCards = require("./tarotCards");
+
 const service = {
-  Hello_Service: {
-    Hello_Port: {
-      sayHello: function (args) {
-        return {
-          greeting: "Hello, " + args.firstName + "!",
-        };
+  Tarot_Service: {
+    Tarot_Port: {
+      shuffleAndDeliverCards: function (args) {
+        if (args.past.toLowerCase() === "true") {
+          return {
+            greeting: arrayOfCards.find(
+              (_, i, ar) => Math.random() < 1 / (ar.length - i)
+            )["name"],
+          };
+        } else if (args.present.toLowerCase() === "true") {
+          return {
+            greeting: arrayOfCards.find(
+              (_, i, ar) => Math.random() < 1 / (ar.length - i)
+            )["name"],
+          };
+        } else if (args.future.toLowerCase() === "true") {
+          return {
+            greeting: arrayOfCards.find(
+              (_, i, ar) => Math.random() < 1 / (ar.length - i)
+            )["name"],
+          };
+        } else if (args.all.toLowerCase() === "true") {
+          let cards = [];
+
+          while (cards.length < 3) {
+            const sampleCardIndex = Math.floor(
+              Math.random() * arrayOfCards.length
+            );
+            const sampleCard = arrayOfCards[sampleCardIndex]["name"];
+            if (!cards.includes(sampleCard)) {
+              cards.push(sampleCard);
+            }
+          }
+
+          return {
+            greeting: cards.join(","),
+          };
+        }
       },
     },
   },
