@@ -5,24 +5,17 @@ const WSDL_PATH = "./tarotService.wsdl";
 const WSDL_DEFINITION = require("fs").readFileSync(WSDL_PATH, "utf8");
 
 const service = {
-  SimpleService: {
-    SimpleServicePortType: {
-      GetHelloString: function (args) {
-        console.log("Received request:", args);
-        try {
-          // Sua lógica de processamento aqui
-          console.log("Response sent successfully.");
-          return {
-            result: "Hello, World!",
-          };
-        } catch (error) {
-          console.error("Error processing request:", error);
-          throw error;
-        }
+  Hello_Service: {
+    Hello_Port: {
+      sayHello: function (args) {
+        return {
+          greeting: "Hello, " + args.firstName + "!",
+        };
       },
     },
   },
 };
+
 const server = http.createServer(function (req, res) {
   res.end("404: Not Found: " + req.url);
 });

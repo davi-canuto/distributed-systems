@@ -1,51 +1,51 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-             name="SimpleService"
-             targetNamespace="http://127.0.0.1:8000/tarot/simple-service"
-             xmlns:tns="http://127.0.0.1:8000/tarot/simple-service">
+<definitions name = "HelloService"
+   targetNamespace = "http:127.0.0.1.com/tarot/HelloService.wsdl"
+   xmlns = "http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns = "http:127.0.0.1.com/tarot/HelloService.wsdl"
+   xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
 
-    <!-- Types -->
-    <types>
-        <xsd:schema targetNamespace="http://127.0.0.1:8000/tarot/simple-service">
-            <xsd:element name="GetHelloStringResponse" type="xsd:string"/>
-        </xsd:schema>
-    </types>
+   <message name = "SayHelloRequest">
+      <part name = "firstName   " type = "xsd:string"/>
+   </message>
 
-    <!-- Message -->
-    <message name="GetHelloStringRequest"/>
+   <message name = "SayHelloResponse">
+      <part name = "greeting" type = "xsd:string"/>
+   </message>
 
-    <message name="GetHelloStringResponse">
-        <part name="result" element="tns:GetHelloStringResponse"/>
-    </message>
+   <portType name = "Hello_PortType">
+      <operation name = "sayHello">
+         <input message = "tns:SayHelloRequest"/>
+         <output message = "tns:SayHelloResponse"/>
+      </operation>
+   </portType>
 
-    <!-- Port Type -->
-    <portType name="SimpleServicePortType">
-        <operation name="GetHelloString">
-            <input message="tns:GetHelloStringRequest"/>
-            <output message="tns:GetHelloStringResponse"/>
-        </operation>
-    </portType>
+   <binding name = "Hello_Binding" type = "tns:Hello_PortType">
+      <soap:binding style = "rpc"
+         transport = "http://schemas.xmlsoap.org/soap/http"/>
+      <operation name = "sayHello">
+         <soap:operation soapAction = "sayHello"/>
+         <input>
+            <soap:body
+               encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+               namespace = "urn:examples:helloservice"
+               use = "encoded"/>
+         </input>
 
-    <!-- Binding -->
-    <binding name="SimpleServiceBinding" type="tns:SimpleServicePortType">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+         <output>
+            <soap:body
+               encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+               namespace = "urn:examples:helloservice"
+               use = "encoded"/>
+         </output>
+      </operation>
+   </binding>
 
-        <operation name="GetHelloString">
-            <soap:operation soapAction="http://127.0.0.1:8000/tarot/simple-service/GetHelloString"/>
-            <input>
-                <soap:body use="literal"/>
-            </input>
-            <output>
-                <soap:body use="literal"/>
-            </output>
-        </operation>
-    </binding>
-
-    <!-- Service -->
-    <service name="SimpleService">
-        <port name="SimpleServicePort" binding="tns:SimpleServiceBinding">
-            <soap:address location="http://127.0.0.1:8000/tarot"/>
-        </port>
-    </service>
+   <service name = "Hello_Service">
+      <documentation>WSDL File for HelloService</documentation>
+      <port binding = "tns:Hello_Binding" name = "Hello_Port">
+         <soap:address
+            location = "http:127.0.0.1.com/tarot" />
+      </port>
+   </service>
 </definitions>
