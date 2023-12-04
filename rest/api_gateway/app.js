@@ -6,6 +6,9 @@ const port = 3000;
 const catsUrl = "https://api.thecatapi.com/v1/images/search";
 const memesUrl = "https://api.imgflip.com/get_memes";
 
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 app.use(cors());
 
 app.get("/cat", async (req, res) => {
@@ -32,19 +35,19 @@ app.get("/meme", async (req, res) => {
   }
 });
 
-// const options = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "API Gateway",
-//       version: "1.0.0",
-//     },
-//   },
-//   apis: ["./seu-arquivo-com-comentarios.js"],
-// };
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Gateway",
+      version: "1.0.0",
+    },
+  },
+  apis: ["./swagger-comments.js"],
+};
 
-// const swaggerSpec = swaggerJsdoc(options);
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const swaggerSpec = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
