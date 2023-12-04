@@ -5,7 +5,7 @@ const port = 3000;
 const catsUrl = "https://api.thecatapi.com/v1/images/search";
 const memesUrl = "https://api.imgflip.com/get_memes";
 
-app.get("/cats", async (req, res) => {
+app.get("/cat", async (req, res) => {
   try {
     const response = await axios.get(catsUrl);
 
@@ -15,7 +15,7 @@ app.get("/cats", async (req, res) => {
   }
 });
 
-app.get("/memes", async (req, res) => {
+app.get("/meme", async (req, res) => {
   try {
     const response = await axios.get(memesUrl);
 
