@@ -2,7 +2,6 @@ const http = require('http');
 const staticHandler = require('serve-handler');
 const WebSocket = require('ws');
 
-// Servir pasta estática
 const server = http.createServer((req, res) => {
   return staticHandler(req, res, { public: 'public' });
 });

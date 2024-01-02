@@ -1,14 +1,24 @@
+const { execSync } = require('child_process');
+const axios = require("axios");
 const amqp = require('amqplib/callback_api');
 
+const catsUrl = "https://api.thecatapi.com/v1/images/search";
+
 amqp.connect('amqp://127.0.0.1', function (err, conn) {
-  conn.createChannel(function (err, ch) {
-    var ex = 'pub_sub_distributed';
-    var msg = process.argv.slice(2).join(' ') || 'Hello World!';
+  conn.createChannel(async function (err, ch) {
+    const catExchange = 'cats';
 
-    ch.assertExchange(ex, 'fanout', { durable: false });
-    ch.publish(ex, '', new Buffer(msg));
-    console.log(" [x] Sent %s", msg);
+    ch.assertExchange(catExchange, 'fanout', { durable: false });
+
+    while (true) {
+      const catResponse = await axios.get(catsUrl)
+
+      const catMsg = catResponse.data[0].url
+
+      ch.publish(catExchange, '', new Buffer(catMsg));
+      console.log("Sent messages for publishers in cats topics.");
+      execSync('sleep 4');
+    }
   });
-
-  setTimeout(function () { conn.close(); process.exit(0) }, 500);
+  // setTimeout(function () { conn.close(); process.exit(0) }, 500);
 })

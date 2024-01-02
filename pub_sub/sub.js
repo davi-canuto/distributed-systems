@@ -2,7 +2,7 @@ const amqp = require('amqplib/callback_api');
 
 amqp.connect('amqp://127.0.0.1', function (err, conn) {
   conn.createChannel(function (err, ch) {
-    var ex = 'pub_sub_distributed';
+    var ex = 'cats';
     ch.assertExchange(ex, 'fanout', { durable: false });
 
     ch.assertQueue('', { exclusive: true }, function (err, q) {
